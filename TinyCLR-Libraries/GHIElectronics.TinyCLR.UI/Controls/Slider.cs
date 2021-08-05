@@ -53,7 +53,8 @@ namespace GHIElectronics.TinyCLR.UI.Controls {
             Width = width;
             Height = height;
             */
-
+            this.Height = 50;
+            this.Width = 100;
             this.Background = new SolidColorBrush(Colors.Gray);
             // Default
             this.KnobSize = 20;
@@ -62,6 +63,7 @@ namespace GHIElectronics.TinyCLR.UI.Controls {
             this.Minimum = 0;
             this.Maximum = 100;
             this.Value = 0;
+
         }
 
         /// <summary>
@@ -132,7 +134,7 @@ namespace GHIElectronics.TinyCLR.UI.Controls {
             //dc.DrawRectangle(Rect, TinyCLR2.Glide.Ext.Colors.Black, 255);
             var brush = new SolidColorBrush(Colors.Black);
             var pen = new Media.Pen(Colors.Black);
-            dc.DrawRectangle(brush, pen,0,0,this.Width, this.Height);
+            //dc.DrawRectangle(brush, pen,0,0,this.Width, this.Height);
 
             //((Window)Parent).FillRect(Rect); //!update
             var thickPen = new Media.Pen(this.tickColor, 1);
