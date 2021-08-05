@@ -9,9 +9,9 @@ using GHIElectronics.TinyCLR.UI.Media;
 using GHIElectronics.TinyCLR.UI.Media.Imaging;
 
 namespace GHIElectronics.TinyCLR.UI.Controls {
-   public class Slider : ContentControl, IDisposable {
-        private BitmapImage button_Up ;
-        private BitmapImage button_Down ;
+    public class Slider : ContentControl, IDisposable {
+        private BitmapImage button_Up;
+        private BitmapImage button_Down;
         public ushort Alpha { get; set; } = 0xC8;
         public string Name { get; set; } = "Slider1";
         private bool dragging = false;
@@ -32,16 +32,16 @@ namespace GHIElectronics.TinyCLR.UI.Controls {
             this.button_Up = BitmapImage.FromGraphics(Graphics.FromImage(Resources.GetBitmap(Resources.BitmapResources.Button_Up)));
             this.button_Down = BitmapImage.FromGraphics(Graphics.FromImage(Resources.GetBitmap(Resources.BitmapResources.Button_Down)));
         }
-    /// <summary>
-    /// Creates a new Slider component.
-    /// </summary>
-    /// <param name="name">Name</param>
-    /// <param name="alpha">Alpha</param>
-    /// <param name="x">X-axis position.</param>
-    /// <param name="y">Y-axis position.</param>
-    /// <param name="width">Width</param>
-    /// <param name="height">Height</param>
-    public Slider() {
+        /// <summary>
+        /// Creates a new Slider component.
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="alpha">Alpha</param>
+        /// <param name="x">X-axis position.</param>
+        /// <param name="y">Y-axis position.</param>
+        /// <param name="width">Width</param>
+        /// <param name="height">Height</param>
+        public Slider(int width=100,int height=50) {
             // int x, int y, int width, int height
             this.InitResource();
             /*
@@ -53,8 +53,8 @@ namespace GHIElectronics.TinyCLR.UI.Controls {
             Width = width;
             Height = height;
             */
-            this.Height = 50;
-            this.Width = 100;
+            this.Height = height;
+            this.Width = width;
             this.Background = new SolidColorBrush(Colors.Gray);
             // Default
             this.KnobSize = 20;
@@ -144,8 +144,8 @@ namespace GHIElectronics.TinyCLR.UI.Controls {
                 var knobY = this.Height - this.knob.Height;
                 int tickX;
                 var tickHeight = (int)System.Math.Ceiling(this.Height * 0.05);
-               
-                dc.DrawLine(thickPen,  x + offsetX, lineY, x + offsetX + this.lineSize, lineY);
+
+                dc.DrawLine(thickPen, x + offsetX, lineY, x + offsetX + this.lineSize, lineY);
 
                 if (this.TickInterval > 1) {
                     for (var i = 0; i < this.TickInterval + 1; i++) {
@@ -156,7 +156,7 @@ namespace GHIElectronics.TinyCLR.UI.Controls {
 
                 if (this.dragging)
                     dc.Scale9Image(x + this.knob.X, y + knobY, this.knob.Width, this.knob.Height, this.button_Down, 5, 5, 5, 5, this.Alpha);
-                else                                                                              
+                else
                     dc.Scale9Image(x + this.knob.X, y + knobY, this.knob.Width, this.knob.Height, this.button_Up, 5, 5, 5, 5, this.Alpha);
             }
             else {
@@ -183,14 +183,14 @@ namespace GHIElectronics.TinyCLR.UI.Controls {
         }
         bool RectContains(Rectangle rect, Point point) {
 
-            if(point.X>rect.X && point.X<rect.X+rect.Width && point.Y > rect.Y && point.Y < rect.Y + rect.Height) {
+            if (point.X > rect.X && point.X < rect.X + rect.Width && point.Y > rect.Y && point.Y < rect.Y + rect.Height) {
                 return true;
             }
             return false;
         }
 
         bool Contains(Point point) {
-            if(point.X>0 && point.Y>0 && point.X<this.Width && point.Y < this.Height) {
+            if (point.X > 0 && point.Y > 0 && point.X < this.Width && point.Y < this.Height) {
                 return true;
             }
             return false;
@@ -202,14 +202,15 @@ namespace GHIElectronics.TinyCLR.UI.Controls {
         /// <returns>Touch event arguments.</returns>
         //public override TouchEventArgs OnTouchDown(TouchEventArgs e) {
         protected override void OnTouchDown(TouchEventArgs e) {
+
             // Global coordinates to local coordinates
             //var localPoint = new Point(e.Point.X - Rect.X, e.Point.Y - Rect.Y);
             e.GetPosition(this, 0, out var ax, out var ay);
             var localPoint = new Point(ax, ay);
 
-            if (this.RectContains(this.knob,localPoint)) {
+            if (this.RectContains(this.knob, localPoint)) {
                 this.dragging = true;
-                if(this.Parent!=null)
+                if (this.Parent != null)
                     this.Invalidate();
 
                 //disable touch thread
@@ -246,10 +247,10 @@ namespace GHIElectronics.TinyCLR.UI.Controls {
             e.GetPosition(this, 0, out var ax, out var ay);
             var localPoint = new Point(ax, ay);
 
-            if (this.RectContains( this.knob,localPoint)) {
+            if (this.RectContains(this.knob, localPoint)) {
                 if (this.dragging) {
                     this.dragging = false;
-                    if(this.Parent!=null)
+                    if (this.Parent != null)
                         this.Invalidate();
                     //e.StopPropagation(); //!update
                 }

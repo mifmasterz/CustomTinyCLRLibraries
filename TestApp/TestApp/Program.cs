@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Threading;
 using GHIElectronics.TinyCLR.Drivers.FocalTech.FT5xx6;
 using TestApp.Properties;
+using System;
 
 namespace TestApp
 {
@@ -73,6 +74,7 @@ namespace TestApp
                 app.InputProvider.RaiseTouch(e.X, e.Y, GHIElectronics.TinyCLR.UI.Input.TouchMessages.Down, System.DateTime.UtcNow);
             };
             app.Run(Program.CreateWindow(display));
+            
         }
         private static UIElement Elements3()
         {
@@ -123,21 +125,29 @@ namespace TestApp
                 Fill = new SolidColorBrush(Colors.Green),
                 HorizontalAlignment = HorizontalAlignment.Center,
             };
-            var slider1 = new Slider();
+            var slider1 = new Slider(300,50);
+            slider1.SetMargin(5);
             //slider1.Height = 100;
-            slider1.SetMargin(20);
             slider1.ValueChangedEvent += (object sender, ValueChangedEventArgs args) =>
             {
                 Debug.WriteLine("val:" + args.SliderValue);
             };
-
+            GvData = new DataGrid(400,200,30,5);
+        
+            GvData.AddColumn(new DataGridColumn("Time", 100));
+            GvData.AddColumn(new DataGridColumn("Sensor A", 100));
+            GvData.AddColumn(new DataGridColumn("Sensor B", 100));
+            
             panel.Children.Add(txt1);
             panel.Children.Add(txt2);
             panel.Children.Add(rect);
             panel.Children.Add(slider1);
+            panel.Children.Add(GvData);
 
             return panel;
         }
+        static Timer timer;
+        static DataGrid GvData;
         static Font font;
         private static UIElement Elements()
         {
@@ -169,7 +179,8 @@ namespace TestApp
             };
 
             var slider1 = new Slider();
-            //slider1.Height = 100;
+            slider1.Width = 300;
+
             //slider1.SetMargin(20);
             slider1.ValueChangedEvent += (object sender, ValueChangedEventArgs args)=>
             {
@@ -197,7 +208,30 @@ namespace TestApp
                 (Colors.Blue, Colors.Teal, 0, 0, window.Width, window.Height);
            
             window.Visibility = Visibility.Visible;
-            window.Child = Elements3();
+            window.Child = Elements2();
+            Random rnd = new Random();
+            int counter = 0;
+            if (GvData != null)
+            {
+                timer = new Timer((object o) =>
+                {
+                    Application.Current.Dispatcher.Invoke(TimeSpan.FromMilliseconds(1), _ =>
+                    {
+                        //insert to db
+                        var item = new DataGridItem(new object[] { DateTime.Now.ToString("HH:mm:ss"), $"{(20 + rnd.Next() * 50).ToString("n2")}C", $"{(rnd.Next() * 1000).ToString("n2")}L" });
+                        //add data to grid
+                        GvData.AddItem(item);
+                        GvData.Invalidate();
+                        if (counter++ > 4)
+                        {
+                            counter = 0;
+                            GvData.Clear();
+                        }
+                        return null;
+                    }, null);
+
+                }, null, 1000, 1000);
+            }
             return window;
         }
     }
