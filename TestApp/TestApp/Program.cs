@@ -61,6 +61,7 @@ namespace TestApp
             touch.Orientation = FT5xx6Controller.TouchOrientation.Degrees0; //Rotate touch coordinates.
 
             font = Resources.GetFont(Resources.FontResources.NinaB);
+            GHIElectronics.TinyCLR.UI.OnScreenKeyboard.Font = font;
             app = new Program(display);
             touch.TouchMove += (_, e) => {
                 app.InputProvider.RaiseTouch(e.X, e.Y, GHIElectronics.TinyCLR.UI.Input.TouchMessages.Move, System.DateTime.UtcNow);
@@ -73,6 +74,28 @@ namespace TestApp
             };
             app.Run(Program.CreateWindow(display));
         }
+        private static UIElement Elements3()
+        {
+            var canvas = new Canvas();
+            var border = new Border();
+
+            border.SetBorderThickness(10);
+            border.BorderBrush = new SolidColorBrush(Colors.Red);
+
+            Canvas.SetLeft(border, 20);
+            Canvas.SetTop(border, 20);
+
+            var txt = new TextBox();
+            txt.Mode = TextBox.TextMode.Password;
+            txt.Font = font;
+            txt.Text = "TinyCLR is Great!";
+
+            border.Child = txt;
+            canvas.Children.Add(border);
+
+            return canvas;
+        }
+
         private static UIElement Elements2()
         {
             var panel = new StackPanel(Orientation.Vertical);
@@ -174,7 +197,7 @@ namespace TestApp
                 (Colors.Blue, Colors.Teal, 0, 0, window.Width, window.Height);
            
             window.Visibility = Visibility.Visible;
-            window.Child = Elements2();
+            window.Child = Elements3();
             return window;
         }
     }
