@@ -83,6 +83,10 @@
       <Project>{2BD3FB57-7D27-4DAF-A0DC-A23F5793E12A}</Project>
       <Name>GHIElectronics.TinyCLR.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\TinyCLR-Libraries\zxing\zxing.csproj">
+      <Project>{EF490E09-112C-4375-A7E9-09426EB1B77F}</Project>
+      <Name>zxing</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

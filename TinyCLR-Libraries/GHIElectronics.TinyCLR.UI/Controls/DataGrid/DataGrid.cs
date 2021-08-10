@@ -99,6 +99,18 @@ namespace GHIElectronics.TinyCLR.UI.Controls
         /// <param name="rowCount">rowCount</param>
         public DataGrid(int width=400, int height=200, int rowHeight=30, int rowCount=10, ushort alpha=255)
         {
+            //default colors:
+            this.HeadersBackColor = GlideUtils.Convert.ToColor("707476");
+            this.HeadersFontColor = GlideUtils.Convert.ToColor("FFFFFF");
+            this.ItemsBackColor = GlideUtils.Convert.ToColor("FFFFFF");
+            this.ItemsAltBackColor = GlideUtils.Convert.ToColor("F4F4F4");
+            this.ItemsFontColor = GlideUtils.Convert.ToColor("000000");
+            this.SelectedItemBackColor = GlideUtils.Convert.ToColor("FFF299");
+            this.SelectedItemFontColor = GlideUtils.Convert.ToColor("000000");
+            this.GridColor = GlideUtils.Convert.ToColor("BFC5C9");
+            this.ScrollbarBackColor = GlideUtils.Convert.ToColor("C0C0C0");
+            this.ScrollbarScrubberColor = GlideUtils.Convert.ToColor("000000");
+
             var x = 0;
             var y = 0;
             //this.ID = name;
@@ -323,8 +335,10 @@ namespace GHIElectronics.TinyCLR.UI.Controls
         /// <returns>Touch event arguments.</returns>
         protected override void OnTouchDown(TouchEventArgs e)
         {
-            var x = e.Touches[0].X;
-            var y = e.Touches[0].Y;
+            e.GetPosition(this, 0, out var x, out var y);
+            //var localPoint = new Point(ax, ay);
+            //var x = e.Touches[0].X;
+            //var y = e.Touches[0].Y;
             //e.GetPosition(this.Parent, 0, out int x, out int y);
             if (Rect.Contains(x,y) && _rows.Count > 0)
             {
@@ -354,8 +368,9 @@ namespace GHIElectronics.TinyCLR.UI.Controls
         {
             if (!_pressed)
                 return;
-            var ax = e.Touches[0].X;
-            var ay = e.Touches[0].Y;
+            e.GetPosition(this, 0, out var ax, out var ay);
+            //var ax = e.Touches[0].X;
+            //var ay = e.Touches[0].Y;
             //e.GetPosition(this.Parent, 0, out int ax, out int ay);
             if (!_moving && Rect.Contains(ax,ay))
             {
@@ -426,9 +441,9 @@ namespace GHIElectronics.TinyCLR.UI.Controls
         {
             if (!Draggable || !_pressed || _rows.Count <= RowCount)
                 return;
-            var ax = e.Touches[0].X;
-            var ay = e.Touches[0].Y;
-            //e.GetPosition(this.Parent, 0, out int ax, out int ay);
+            //var ax = e.Touches[0].X;
+            //var ay = e.Touches[0].Y;
+            e.GetPosition(this, 0, out var ax, out var ay);
             if (!_moving)
             {
                 if (_ignoredTouchMoves < _maxIgnoredTouchMoves)
