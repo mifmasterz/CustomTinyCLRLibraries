@@ -1,4 +1,4 @@
-﻿using GHIElectronics.TinyCLR.Devices.Display;
+using GHIElectronics.TinyCLR.Devices.Display;
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.I2c;
 //using GHIElectronics.TinyCLR.DUE;
@@ -178,7 +178,7 @@ namespace TestApp
                 Height = 25,
                 HorizontalAlignment = HorizontalAlignment.Center,
             };
-            var slider1 = new Slider(400, 50);
+            var slider1 = new Slider(400, 30);
             slider1.SetMargin(5);
             //slider1.Height = 100;
             slider1.ValueChangedEvent += (object sender, ValueChangedEventArgs args) =>
@@ -200,12 +200,44 @@ namespace TestApp
            
             qrImage.SetMargin(10);
 
+            var txt = new Text(font, "Off") {
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+            };
+
+            var btn1 = new SwitchButton() {
+                Child = txt,
+                Width = 100,
+                Height = 30,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+
+            btn1.Click += (object sender, RoutedEventArgs e) => {
+                  if (btn1.Mode == SwitchButton.ButtonMode.Switch) {
+                      if (btn1.State == SwitchButton.SwitchState.On) {
+                          btn1.Child = new Text(font,"On") {
+                              VerticalAlignment = VerticalAlignment.Center,
+                              HorizontalAlignment = HorizontalAlignment.Center,
+                          };
+                      }
+                      else {
+                          btn1.Child = new Text(font,"Off") {
+                              VerticalAlignment = VerticalAlignment.Center,
+                              HorizontalAlignment = HorizontalAlignment.Center,
+                          };
+                      }
+                      btn1.Invalidate();
+                  }
+              };
+
+            panel.Children.Add(btn1);
             panel.Children.Add(txt1);
             panel.Children.Add(txtTitle);
             panel.Children.Add(progress1);
             panel.Children.Add(slider1);
             panel.Children.Add(GvData);
             panel.Children.Add(qrImage);
+            
 
             EncodeQR("Hello World!");
             var imgSrc = BitmapImage.FromGraphics(Screen);
@@ -226,7 +258,11 @@ namespace TestApp
             return panel;
         }
 
-      
+       
+
+
+
+
 
 
 
